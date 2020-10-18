@@ -44,6 +44,7 @@ java -jar target/spring-mysql-redis-cache.jar
 ### Run with Docker
 ```
 docker ps
+docker-compose exec mysql bash
 docker stop idcontainerxxx
 docker-compose build
 docker-compose up
