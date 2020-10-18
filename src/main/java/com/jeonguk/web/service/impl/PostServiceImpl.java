@@ -33,7 +33,7 @@ public class PostServiceImpl implements PostService {
             log.info("PostServiceImpl.findPostById() : cache post >> " + post.toString());
             return post;
         }
-        final Optional<Post> post = Optional.ofNullable(postRepository.findOne(id));
+        final Optional<Post> post = postRepository.findById(id);
         if(post.isPresent()) {
             operations.set(key, post.get(), 10, TimeUnit.SECONDS);
             log.info("PostServiceImpl.findPostById() : cache insert >> " + post.get().toString());
@@ -71,9 +71,9 @@ public class PostServiceImpl implements PostService {
             redisTemplate.delete(key);
             log.info("PostServiceImpl.deletePost() : cache delete ID >> " + id);
         }
-        final Optional<Post> post = Optional.ofNullable(postRepository.findOne(id));
+        final Optional<Post> post = postRepository.findById(id);
         if(post.isPresent()) {
-            postRepository.delete(id);
+            postRepository.deleteById(id);
         } else {
             throw new ResourceNotFoundException();
         }

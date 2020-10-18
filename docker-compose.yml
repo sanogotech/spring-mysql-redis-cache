@@ -1,0 +1,87 @@
+version: '3.3'
+services:
+
+  # https://medium.com/@chrischuck35/how-to-create-a-mysql-instance-with-docker-compose-1598f3cc1bee
+  # nginx:
+   # container_name: v-nginx
+   # image: nginx:1.13
+   # restart: always
+   # ports:
+   # - 9000:9000
+   # - 443:443
+   # volumes:
+   # - ./nginx/conf.d:/etc/nginx/conf.d
+
+   
+  dbnosqlredis:
+    image: "redis:alpine"
+    hostname: redis
+    ports:
+     - "6379:6379"
+    # networks:
+        # - spring_mysql_net
+  
+  # docker-compose exec mysql bash
+  # https://stackoverflow.com/questions/56441497/docker-mysql-cant-connect-from-spring-boot-app-to-mysql-database
+  mysqlbootdb:
+   container_name: mysqlbootdb
+   image: mysql:8.0
+   environment:
+    MYSQL_DATABASE: dbspring
+    MYSQL_ROOT_PASSWORD: root
+    MYSQL_ROOT_HOST: '%'
+    # So you don't have to use root, but you can if you like
+    MYSQL_USER: root
+    # You can use whatever password you like
+    MYSQL_PASSWORD: root
+    # Password for root access
+    #MYSQL_ROOT_PASSWORD: 'password'
+   ports:
+   # <Port exposed> : < MySQL Port running inside container>
+   - "3306:3306"
+   expose:
+      # Opens port 3306 on the container
+      - '3306'
+   #restart: always
+   # Where our data will be persisted
+   volumes:
+      - my-db:/var/lib/mysql
+   # networks:
+        # - spring_mysql_net
+
+  app:
+    build: .
+    ports:
+     - "8080:8080"
+    environment:
+        MYSQL_DATABASE: dbspring
+        MYSQL_ROOT_PASSWORD: root
+        MYSQL_ROOT_HOST: '%'
+        # So you don't have to use root, but you can if you like
+        MYSQL_USER: root
+        # You can use whatever password you like
+        MYSQL_PASSWORD: root
+    depends_on:
+      - dbnosqlredis
+      - mysqlbootdb
+    #links:
+    #  - "db:redis"
+    #command: mvn clean spring-boot:run -Dspring-boot.run.profiles=docker
+    #command: mvn clean install -Dmaven.test.skip=true  -Dspring.profiles.active=prod
+    # networks:
+        # - spring_mysql_net
+
+# networks:
+  # spring_mysql_net:
+    # driver: bridge
+# Names our volume
+#Volumes Command should be the last command in docker compose include volume names of all services together and run the docker compose. 
+#It will create containers.
+volumes:
+  my-db:
+
+   
+    
+      
+ 
+    

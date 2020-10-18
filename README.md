@@ -1,11 +1,11 @@
 # spring-mysql-redis-cache
 Spring Boot Mysql Redis  REST API Cache example
 
-##
+## 
 ### Prerequisites
 - JDK 1.8
 - Maven
-- Mysql
+- H2  or Mysql
 - Redis
 
 ## Quick Start
@@ -14,9 +14,16 @@ Spring Boot Mysql Redis  REST API Cache example
 ```
 git clone https://github.com/jeonguk/spring-mysql-redis-cache.git
 cd spring-mysql-redis-cache
+
 ```
 
 ```
+* Dev mode
+H2 Embedded
+```
+
+```
+* Production
 MySQL START
 ```
 
@@ -26,12 +33,22 @@ Redis START
 
 ### Build
 ```
-mvn clean package
+mvn clean install  -Dmaven.test.skip=true
 ```
 
-### Run
+### Run with java -jar
 ```
 java -jar target/spring-mysql-redis-cache.jar
+```
+
+### Run with Docker
+```
+docker ps
+docker stop idcontainerxxx
+docker-compose build
+docker-compose up
+docker-compose down
+
 ```
 
 ##
